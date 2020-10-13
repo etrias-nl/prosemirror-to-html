@@ -46,12 +46,14 @@ class Renderer
         $html = [];
 
         if (is_object($node)) {
+            $renderedMarks = [];
             if (isset($node->marks)) {
                 foreach ($node->marks as $mark) {
                     if (is_object($mark)) {
                         try {
                             $markRenderer = $this->marksRendererRegistry->get($mark->type);
                             $renderedTag = $markRenderer->getTag($mark);
+                            $renderedMarks[] = $renderedTag;
                             $html[] = $this->renderOpeningTag($renderedTag);
                         } catch (RendererNotFoundException $e) {
                             //continue
@@ -85,17 +87,10 @@ class Renderer
 
 
             if (isset($node->marks)) {
-                foreach (array_reverse($node->marks) as $mark) {
-                    if (is_object($mark)) {
-                        try {
-                            $markRenderer = $this->marksRendererRegistry->get($mark->type);
-                            $renderedTag = $markRenderer->getTag($mark);
-                            $html[] = $this->renderClosingTag($renderedTag);
-                        } catch (RendererNotFoundException $e) {
-                            //continue
-                        }
-                    }
+                foreach (array_reverse($renderedMarks) as $tag) {
+                    $html[] = $this->renderClosingTag($tag);
                 }
+                $renderedMarks = [];
             }
         }
 
