@@ -18,7 +18,7 @@ class RendererRegistry
      * RendererRegistry constructor.
      * @param RendererInterface[] $renderers
      */
-    public function __construct(array $renderers = [])
+    public function __construct(iterable $renderers = [])
     {
         $this->add($renderers);
     }
@@ -28,7 +28,7 @@ class RendererRegistry
      */
     public function add($renderers)
     {
-        if (is_array($renderers)) {
+        if (is_iterable($renderers)) {
             foreach ($renderers as $renderer) {
                 $this->add($renderer);
             }
