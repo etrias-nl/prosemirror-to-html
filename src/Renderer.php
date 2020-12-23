@@ -141,7 +141,15 @@ class Renderer
 
     public function render($value)
     {
+        if (empty($value)) {
+            return '';
+        }
+
         $this->document($value);
+
+        if (empty($this->document)) {
+            return '';
+        }
 
         $html = [];
 
