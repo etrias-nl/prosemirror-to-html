@@ -3,6 +3,7 @@
 
 namespace ProseMirrorToHtml\Renderers\Nodes;
 
+use ProseMirrorToHtml\Renderer;
 use ReflectionClass;
 use ProseMirrorToHtml\Helpers\StringHelper;
 
@@ -23,6 +24,12 @@ abstract class AbstractNodeRenderer implements NodeRendererInterface
     {
         return false;
     }
+
+    public function getHtml($node, Renderer $renderer): ?string
+    {
+        return null;
+    }
+
 
     public function getText($node)
     {

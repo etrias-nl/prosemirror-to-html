@@ -41,7 +41,7 @@ class Renderer
         return $this;
     }
 
-    private function renderNode($node)
+    public function renderNode($node)
     {
         $html = [];
 
@@ -62,16 +62,21 @@ class Renderer
                 }
             }
 
+            $nodeHtml = null;
             try {
                 $nodeRenderer = $this->nodesRendererRegistry->get($node->type);
                 $renderedNodeTag = $nodeRenderer->getTag($node);
-                $html[] = $this->renderOpeningTag($renderedNodeTag);
+                $nodeHtml = $nodeRenderer->getHtml($node, $this);
+                if (!$nodeHtml) {
+                    $html[] = $this->renderOpeningTag($renderedNodeTag);
+                }
             } catch (RendererNotFoundException $e) {
                 $nodeRenderer = null;
             }
 
-
-            if (isset($node->content)) {
+            if ($nodeHtml) {
+                $html[] = $nodeHtml;
+            } elseif (isset($node->content)) {
                 foreach ($node->content as $nestedNode) {
                     $html[] = $this->renderNode($nestedNode);
                 }
@@ -81,7 +86,7 @@ class Renderer
                 $html[] = $text;
             }
 
-            if ($nodeRenderer && !$nodeRenderer->isSelfClosing()) {
+            if ($nodeRenderer && !$nodeHtml && !$nodeRenderer->isSelfClosing()) {
                 $html[] = $this->renderClosingTag($renderedNodeTag);
             }
 
