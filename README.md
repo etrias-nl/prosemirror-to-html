@@ -1,4 +1,6 @@
-> We need your support to maintain this package. 💖 https://github.com/sponsors/ueberdosis
+# ⚠ DEPRECATED
+
+No replacement suggested.
 
 # ProseMirror to HTML
 
